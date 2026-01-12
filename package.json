@@ -18,6 +18,8 @@
   "bugs": {
     "url": "https://github.com/divyakirtiaman/Talent-IQ/issues"
   },
-  "homepage": "https://github.com/divyakirtiaman/Talent-IQ#readme"
+  "homepage": "https://github.com/divyakirtiaman/Talent-IQ#readme",
+  "dependencies": {
+    "inngest": "^3.44.3"
+  }
 }
- 

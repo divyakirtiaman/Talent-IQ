@@ -1,34 +1,36 @@
-import { Inngest } from "inngest/nextjs";
-import { connectDB } from "./db";
+import { Inngest } from "inngest";
+import { connectDB } from "./db.js";
 import User from "../models/User.js";
 
-export const inngest = new Inngest({id: "talent-iq"});
+export const inngest = new Inngest({ id: "talent-iq" });
 
-const syncUser=inngest.createFunction(
-    {id:"sync-user"},
-    {event:"clerk/user.created"},
-    async({event})=>{
-        await connectDB();
-        const {clerkId, emailAddresses, firstName, profileImageUrl}=event.data;
-        const user=new User({
-            clerkId,
-            email: emailAddresses[0].emailAddress,
-            name: firstName,
-            profileImage: profileImageUrl,
-        });
-        await user.save();
-    }
+const syncUser = inngest.createFunction(
+  { id: "sync-user" },
+  { event: "clerk/user.created" },
+  async ({ event }) => {
+    await connectDB();
+
+    const { clerkId, emailAddresses, firstName, profileImageUrl } = event.data;
+
+    const user = new User({
+      clerkId,
+      email: emailAddresses[0].emailAddress,
+      name: firstName,
+      profileImage: profileImageUrl,
+    });
+
+    await user.save();
+  }
 );
 
-const DeleteUser=inngest.createFunction(
-    {id:"delete-user"},
-    {event:"clerk/user.deleted"},   
+const DeleteUserFromDB = inngest.createFunction(
+  { id: "delete-user" },
+  { event: "clerk/user.deleted" },
+  async ({ event }) => {
+    await connectDB();
+    const { id: clerkId } = event.data;
+    await User.findOneAndDelete({ clerkId });
+  }
+);
 
-    async({event})=>{
-        await connectDB();
-        const {id:clerkId}=event.data;
-        await User.findOneAndDelete
-
-({clerkId});
-});
-export const inngestFunctions=[syncUser, DeleteUser];
+export const functions = [syncUser, DeleteUserFromDB];

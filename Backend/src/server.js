@@ -11,7 +11,7 @@ import { protectRoute } from "./middleware/protectRoute.js";
 
 const app=express();
 
-const _dirnmae=path.resolve();
+const __dirnmae=path.resolve();
 
 app.use(express.json());
 app.use(cors({origin:ENV.CLIENT_URL,credentials:true}));
@@ -32,9 +32,9 @@ app.use("/api/inngest", serve({client:inngest,functions}));
  });
 
  if(ENV.NODE_ENV==="production"){
-    app.use(express.static(path.join(_dirnmae,"../frontend/build")));
+    app.use(express.static(path.join(__dirnmae,"../frontend/dist")));
     app.use((req, res) => {
-        res.sendFile(path.join(_dirnmae, "../frontend","build","index.html")); // relative path_dirnmae, "../Frontend","dist","index.html"));
+        res.sendFile(path.join(__dirnmae, "../frontend","build","index.html")); // relative path_dirnmae, "../Frontend","dist","index.html"));
       });
  }
 

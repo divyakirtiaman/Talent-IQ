@@ -1,4 +1,4 @@
-import {streamchat} from "stream-chat";
+import {StreamChat} from "stream-chat";
 import { ENV } from "./env.js";
 const apikey=ENV.STREAM_API_KEY;
 const apiSecret=ENV.STREAM_API_SECRET;
@@ -7,7 +7,7 @@ if(!apikey || !apiSecret){
     console.error("Stream API key and secret are required");
 }
 
-export const  chatclint=streamchat.getInstance(apikey,apiSecret);   
+export const chatclint=StreamChat.getInstance(apikey,apiSecret);   
 
 export const upsetStreamUser=async(userDta)=>{
     try{

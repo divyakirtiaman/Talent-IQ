@@ -32,9 +32,9 @@ app.use("/api/inngest", serve({client:inngest,functions}));
  });
 
  if(ENV.NODE_ENV==="production"){
-    app.use(express.static(path.join(_dirnmae,"../Frontend/build")));
+    app.use(express.static(path.join(_dirnmae,"../frontend/build")));
     app.use((req, res) => {
-        res.sendFile(path.join(_dirnmae, "../Frontend","build","index.html")); // relative path_dirnmae, "../Frontend","dist","index.html"));
+        res.sendFile(path.join(_dirnmae, "../frontend","build","index.html")); // relative path_dirnmae, "../Frontend","dist","index.html"));
       });
  }
 

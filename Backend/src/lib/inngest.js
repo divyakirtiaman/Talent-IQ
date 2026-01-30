@@ -1,6 +1,7 @@
 import { Inngest } from "inngest";
 import { connectDB } from "./db.js";
 import User from "../models/User.js";
+import { upsetStreamUser } from "./stream.js";
 
 export const inngest = new Inngest({ id: "talent-iq" });
 
@@ -22,7 +23,13 @@ const syncUser = inngest.createFunction(
     });
 
     await user.save();
-    console.log("User saved in MongoDB ✅");
+    await upsetStreamUser({
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      image: user.profileImage,      
+    }); 
+
   }
 );
 
@@ -33,9 +40,10 @@ const DeleteUserFromDB = inngest.createFunction(
     await connectDB();
 
     const { id } = event.data;
-    await User.findOneAndDelete({ clerkId: id });
+    await User.deleteOne({ clerkId: id });
+    await deleteStreamUser(id.toString());
 
-    console.log("User deleted from MongoDB ✅");
+
   }
 );
 
